@@ -13,7 +13,7 @@ def test [a] {
 # echo $toc
 # what isthe diff between this and (proc)
 
-def data [] {
+def get-data [] {
 	let json = cat .vuepress/configs/sidebar/en.ts | parse -r 'sidebarEn: SidebarConfig = ([\s\S]*);'
 	$json.capture0.0 | str replace --all "'" "\"" | from json
 }
@@ -23,11 +23,7 @@ def flatten1 [t: table] {
 	$table | each {|it| ($it | get link) | append ($it | get children )} | flatten
 }
 
-# $parsed./book/ | get link
-let parsed = data
-
-# let table = $parsed./book/ | default [] children | select link children
-# let flat = $table | each {|it| ($it | get link) | append ($it | get children )} | flatten
+let parsed = get-data
 
 # echo $flat
 let links = flatten1 $parsed./book/ 
